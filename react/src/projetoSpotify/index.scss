@@ -1,0 +1,195 @@
+.spotify {
+    display: flex;
+    flex-direction: column;
+
+    header {
+        display: flex;
+        background-color: #459C26;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        
+    }
+
+    .corpo-site {
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(180deg, #459C26 0%, #1E1E1E 81.25%, #1E1E1E 81.26%);
+        height: 100%;
+        align-items: center;
+
+        .cadastroMusica {
+            margin-top: 40px;
+            align-items: center;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            width: 70%;
+
+            .titulo {
+                display: flex;
+                flex-direction: row;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+                img {
+                    display: flex;
+                    justify-self: flex-end;
+                }
+            }
+
+            .formulario {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                margin-bottom: 10px;
+                width: 50%;
+                align-items: center;
+
+                > input {
+                    width: 100%;
+                    margin: 10px;
+                    border: none;
+                    border-radius: 6px;
+                    background-color: #969696;
+                    padding: 10px;
+                }
+
+                input:focus {
+                    outline: none;
+                }
+
+                .campo-inputs {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    justify-content: space-between;
+                    width: 100%;
+
+                    > div {
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        margin: 10px;
+                        justify-content: center;
+
+                        input {
+                            margin: 10px;
+                            border: none;
+                            border-radius: 6px;
+                            background-color: #969696;
+                            padding: 10px;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .pesquisa {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 45%;
+            margin-top: 50px;
+            justify-content: center;
+            
+            border-radius: 6px;
+            background-color: #969696;
+            
+            padding: 10px;
+            
+
+            input {
+                margin: 10px;
+                        border: none;
+                        background-color: #969696;
+                        width: 100%;
+
+            }
+
+            input:focus {
+                outline: none;
+            }
+
+            > img {
+                width: 30px;
+            }
+        }
+
+        .tabela-musicas {
+            display: flex;
+            margin-top: 40px;
+            padding: 50px;;
+            flex-direction: column;
+            background-color: #fff;
+            border-radius: 10px;
+            width: 62%;
+            justify-content: center;
+            align-items: center;
+
+            .musica {
+                width: 70%;
+                justify-content: space-between;
+                background-color: #969696;
+                padding: 20px;
+                display: flex;
+                flex-direction: row;
+                border-radius: 20px;
+                align-items: center;
+                margin-bottom: 30px;
+                transition: 0.6s;
+
+                .titulo-descricao {
+                    display: flex;
+                    flex-direction: column;
+
+                    .descricao-musica {
+                        display: flex;
+                        flex-direction: row;
+                        gap: 14px;
+                    }
+                }
+
+                .outraDivisao {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    > img {
+                        width: 100px;
+                        height: 100px;
+                        border-radius: 100px;
+                    }
+
+                    .album-genero {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 11px;
+                        align-items: flex-end;
+                        margin-right: 10px;
+                    }
+
+                .alteracao-deletar {
+                    margin-left: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    flex-direction: column;
+                    img {
+                        width: 40px;
+                    }
+                }
+                }
+            }
+
+            .musica:hover {
+                transform: scale(1.009);
+                transition: 0.6s;
+
+            }
+        }
+    }
+}
