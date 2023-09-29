@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Alterar, Buscar, BuscarPor, Deletar, Inserir } from "../repository/indexRepository.js";
+import { Alterar, AlterarFavorito, Buscar, BuscarFavoritos, BuscarPor, Deletar, Inserir } from "../repository/indexRepository.js";
 
 
 const endpoints = Router()
@@ -53,6 +53,19 @@ endpoints.get('/buscar/:nome', async (req, resp) => {
     }
 })
 
+endpoints.get('/favoritos', async (req, resp) => {
+    try{
+        const resposta = await BuscarFavoritos()
+
+        resp.send(resposta)
+    }
+    catch(err){
+        resp.status(500).send({
+            erro: err.message
+        })
+    }
+})
+
 endpoints.put('/alterar/:id', async (req, resp) =>{
     try{
         const {id} = req.params
@@ -80,6 +93,30 @@ endpoints.put('/alterar/:id', async (req, resp) =>{
         if(resposta !== 1)
             throw new Error('Não foi possível alterar')
         
+        resp.status(204).send()
+    }
+    catch(err){
+        resp.status(500).send({
+            erro: err.message
+        })
+    }
+})
+
+endpoints.put('/alterar/favorito/:id', async (req, resp) => {
+    try{
+        const {id} = req.params
+
+        const {valor} = req.body
+
+        if(!id || isNaN(id))
+            throw new Error('ID inválido ou indefinido')
+        if(valor === '' || valor === undefined)
+            throw new Error('Não foi possível identificar se deseja favoritar ou desfavoritar')
+
+        const resposta = await AlterarFavorito(valor, id)
+        if(resposta !== 1)
+            throw new Error('Não foi possivel favoritar ou desfavoritar')
+
         resp.status(204).send()
     }
     catch(err){

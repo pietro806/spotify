@@ -14,7 +14,7 @@ export async function Inserir(musica){
 }
 
 export async function Buscar(){
-    const sql = `select id_musica       as id
+    const sql = `select id_musica       as id,
                         nm_musica		as musica,
         	            nm_cantor		as cantor,
                         ds_duracao		as duracao,
@@ -31,7 +31,7 @@ export async function Buscar(){
 }
 
 export async function BuscarPor(nome) {
-    const sql = `select  id_musica      as id
+    const sql = `select  id_musica      as id,
                          nm_musica		as musica,
         	             nm_cantor		as cantor,
                          ds_duracao		as duracao,
@@ -49,6 +49,23 @@ export async function BuscarPor(nome) {
     return resp
 }
 
+export async function BuscarFavoritos(){
+    const sql = `select id_musica       as id,
+                        nm_musica       as musica,
+                        nm_cantor       as cantor,
+                        ds_duracao      as duracao,
+                        dt_lancamento   as lancamento,
+                        img_musica      as img,
+                        bt_favorito     as favorito,
+                        ds_album        as album,
+                        ds_genero       as genero
+                   from tb_musica
+                  where bt_favorito     = true;`
+
+    const [resp] = await conexao.query(sql)
+    return resp;
+}
+
 export async function Alterar(musica, id){
     const sql = `update tb_musica
                     set	nm_musica     = ?,
@@ -63,6 +80,16 @@ export async function Alterar(musica, id){
 
     const [resp] = await conexao.query(sql, [musica.nome, musica.cantor, musica.duracao, musica.lancamento, musica.img, musica.favorito, musica.album, musica.genero, id])
 
+    return resp.affectedRows
+}
+
+
+export async function AlterarFavorito(valor, id){
+    const sql = `update tb_musica
+                    set bt_favorito = ?
+                  where id_musica   = ?`
+    
+    const [resp] = await conexao.query(sql, [valor, id])
     return resp.affectedRows
 }
 
