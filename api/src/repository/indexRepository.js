@@ -66,6 +66,23 @@ export async function BuscarFavoritos(){
     return resp;
 }
 
+export async function BuscarPorID(id){
+    const sql = `select id_musica       as id,
+                        nm_musica       as musica,
+                        nm_cantor       as cantor,
+                        ds_duracao      as duracao,
+                        dt_lancamento   as lancamento,
+                        img_musica      as img,
+                        bt_favorito     as favorito,
+                        ds_album        as album,
+                        ds_genero       as genero
+                   from tb_musica
+                  where id_musica     = ?;`
+
+    const [resp] = await conexao.query(sql, [id]);
+    return resp;
+}
+
 export async function Alterar(musica, id){
     const sql = `update tb_musica
                     set	nm_musica     = ?,

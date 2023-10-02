@@ -1,0 +1,9 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+	<title>OOjs_UI_icon_heart</title>
+	<defs>
+		<image  width="120" height="120" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4AQMAAAADqqSRAAAAAXNSR0IB2cksfwAAAAZQTFRFAAAAAP8ANkNEvQAAAAJ0Uk5TAP9bkSK1AAABUklEQVR4nOWVMXLEIAxFtbOFyz2CL5IZ3yx2bkYmF6FL65KCQQEkjL7xzjaZNFEjnsbof+NBJvr9mHfAO/NWsiaamcsDkySilTlKuSS6cQ4ps24vO2vZZX6UhZeyl32lUy2HzIssajlqn7yo5VRt1EUts8rlhaRN+jJ/SHLFZonPE39J8qLL/C1pF92RNYL4eMpx4BU4vWTG+He8Ar4+rzMvwOP3OPMMHAZ+AO8DT8B+4DuwG/gGvA2MB9Tug0a64MVwbPdLI1ywfSG918Y+gWF3wdawzglr1xpMlbvBeMndYKjcDcq86QZ9m0/GjjUk86ob0oHWDCXlZiC2+Qfy3cD+hJsh3wemsdMNHBN1BflmIB48g3wT7FN5ArkmeMjpCWwHE8qLgWR4AXkxEAxPICeCzvAN5aqgxSyYgGdoX94Q/zkTyBVBB0zYnuj9xG/0N/ED1QBnMYQ/X4QAAAAASUVORK5CYII="/>
+	</defs>
+	<style>
+	</style>
+	<use id="Background" href="#img1" x="0" y="0"/>
+</svg>

@@ -1,21 +1,22 @@
 .spotify {
     display: flex;
+    height: 100vh;
     flex-direction: column;
 
     header {
         display: flex;
-        background-color: #459C26;
+        background-color: #1ac255;
         align-items: center;
         justify-content: center;
         padding: 20px;
-        
     }
 
     .corpo-site {
         display: flex;
         flex-direction: column;
-        background: linear-gradient(180deg, #459C26 0%, #1E1E1E 81.25%, #1E1E1E 81.26%);
-        height: 100%;
+        background: #121212;
+        // height: 100vh;
+        flex: 1;
         align-items: center;
 
         .cadastroMusica {
@@ -24,8 +25,10 @@
             border-radius: 5px;
             display: flex;
             flex-direction: column;
-            background-color: #fff;
+            background-color: #EFEFEF;
             width: 70%;
+
+            
 
             .titulo {
                 display: flex;
@@ -33,9 +36,15 @@
                 width: 100%;
                 align-items: center;
                 justify-content: center;
+                justify-content: space-between;
+                height: 45px;
+
                 img {
                     display: flex;
                     justify-self: flex-end;
+                    position: relative;
+
+                    left: -25px;
                 }
             }
 
@@ -44,7 +53,7 @@
                 flex-direction: column;
                 justify-content: center;
                 margin-bottom: 10px;
-                width: 50%;
+                width: 80%;
                 align-items: center;
 
                 > input {
@@ -54,6 +63,14 @@
                     border-radius: 6px;
                     background-color: #969696;
                     padding: 10px;
+                    height: 35px;
+                    font-size: 17px;
+
+                    font-weight: bold;
+                }
+
+                >input::placeholder {
+                    color: #313131;
                 }
 
                 input:focus {
@@ -74,6 +91,7 @@
                         align-items: center;
                         margin: 10px;
                         justify-content: center;
+                        width: 45%;
 
                         input {
                             margin: 10px;
@@ -81,9 +99,35 @@
                             border-radius: 6px;
                             background-color: #969696;
                             padding: 10px;
+                            font-weight: bold;
                             width: 100%;
+                            height: 25px;
+                            height: 35px;
                         }
+
+                        input::placeholder {
+                            color: #313131;
+                        }
+        
                     }
+                }
+
+                .salvar {
+                    padding: 15px;
+                    border-radius: 11px;
+                    background-color: #1cc256;
+                    cursor: pointer;
+                    transition: 0.2s;
+                    color: white;
+                    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+                }
+
+                .salvar:hover {
+                        transform: translateY(-3px);
+                        background-color: #1ED760;
+                        transition: 0.2s;
+                        font-weight: bold;
+                        font-size: 16px;
                 }
             }
         }
@@ -100,14 +144,46 @@
             background-color: #969696;
             
             padding: 10px;
+
+            .favoritoss {
+                transition: 0.4s;
+                cursor: pointer;
+            }
+
+            .favoritoss:hover {
+                transition: 0.4s;
+                width: 35px;
+            }
+
+            .salvar {
+                padding: 15px;
+                border-radius: 11px;
+                background-color: #1cc256;
+                cursor: pointer;
+                transition: 0.2s;
+                color: white;
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+            }
             
+            .salvar:hover {
+                transform: translateY(-3px);
+                background-color: #1ED760;
+                transition: 0.2s;
+                font-weight: bold;
+                font-size: 16px;
+            }
 
             input {
                 margin: 10px;
-                        border: none;
-                        background-color: #969696;
-                        width: 100%;
+                border: none;
+                background-color: #969696;
+                width: 100%;
+                font-weight: bold;
+                font-size: 17px;
+            }
 
+            input::placeholder {
+                color: #313131;
             }
 
             input:focus {
@@ -122,52 +198,82 @@
         .tabela-musicas {
             display: flex;
             margin-top: 40px;
-            padding: 50px;;
+            padding: 50px 50px 20px 50px;
             flex-direction: column;
-            background-color: #fff;
+            background-color: #EFEFEF;
             border-radius: 10px;
             width: 62%;
             justify-content: center;
             align-items: center;
+            margin-bottom: 40px;
 
             .musica {
-                width: 70%;
+                width: 90%;
                 justify-content: space-between;
-                background-color: #969696;
-                padding: 20px;
+                background-color: #fff;
+                padding: 15px 35px 15px 35px;
                 display: flex;
                 flex-direction: row;
                 border-radius: 20px;
                 align-items: center;
                 margin-bottom: 30px;
                 transition: 0.6s;
+                align-items: flex-start;
+
+                .icones {
+                    transition: opacity 0.6s ease-in-out;
+                    opacity: 0;
+                    display: flex;
+                    gap: 10px;
+                    transition: 0.6s;
+
+                    img {
+                        height: 30px;
+                    }
+                }
 
                 .titulo-descricao {
                     display: flex;
                     flex-direction: column;
+                    gap: 2px;
+
+                    > p {
+                        font-size: 16px;
+                    }
+
+                    h1 {
+                        font-size: 24px;
+                        font-weight: bold;
+                    }
 
                     .descricao-musica {
                         display: flex;
                         flex-direction: row;
+                        font-size: 19px;
                         gap: 14px;
                     }
                 }
 
                 .outraDivisao {
                     display: flex;
-                    flex-direction: row;
-                    align-items: center;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    justify-content: center;
+                    transition: 0.6s;
+
+                    // position: relative;
+                    // right: 40px;
 
                     > img {
-                        width: 100px;
-                        height: 100px;
+                        width: 80px;
+                        height: 80px;
                         border-radius: 100px;
+                        transition: 0.6s;
                     }
 
                     .album-genero {
                         display: flex;
                         flex-direction: column;
-                        gap: 11px;
                         align-items: flex-end;
                         margin-right: 10px;
                     }
@@ -183,12 +289,39 @@
                     }
                 }
                 }
+
+            height: 130px;
             }
-
+            
             .musica:hover {
-                transform: scale(1.009);
-                transition: 0.6s;
+                height: 200px;
+                background-color: #d1f8df;
 
+                .icones {
+                    transition: 0.6s;
+                    opacity: 1;
+                    gap: 10px;
+                    margin-top: 55px;
+
+                    .coracao {
+                        color: #1ac255;
+                    }
+                    > img {
+                        height: 30px;
+                        cursor: pointer;
+                    }
+                }
+
+                .outraDivisao {
+                    transition: 0.6s;
+
+                    img {
+                        transition: 0.6s;
+                        height: 155px;
+                        width: 155px;
+                        border-radius: 5px;
+                    }
+                }
             }
         }
     }

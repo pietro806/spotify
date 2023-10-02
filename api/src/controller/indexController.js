@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Alterar, AlterarFavorito, Buscar, BuscarFavoritos, BuscarPor, Deletar, Inserir } from "../repository/indexRepository.js";
+import { Alterar, AlterarFavorito, Buscar, BuscarFavoritos, BuscarPor, Deletar, Inserir, BuscarPorID } from "../repository/indexRepository.js";
 
 
 const endpoints = Router()
@@ -17,8 +17,8 @@ endpoints.post('/inserir', async (req, resp) => {
             throw new Error('Lançamento não identificado')
         if(!musica.img)
             throw new Error('Imagem não identificada')
-        if(!musica.favorito)
-            throw new Error('Favorito não identificado')
+        if(!musica.album)
+            throw new Error('Album não identificado')
         if(!musica.genero)
             throw new Error('Gênero não identificado')
 
@@ -83,8 +83,6 @@ endpoints.put('/alterar/:id', async (req, resp) =>{
             throw new Error('Lançamento não identificado')
         if(!musica.img)
             throw new Error('Imagem não identificada')
-        if(!musica.favorito)
-            throw new Error('Favorito não identificado')
         if(!musica.genero)
             throw new Error('Gênero não identificado')
 
@@ -96,9 +94,9 @@ endpoints.put('/alterar/:id', async (req, resp) =>{
         resp.status(204).send()
     }
     catch(err){
-        resp.status(500).send({
-            erro: err.message
-        })
+        resp.status(500).send(
+            console.log(err.message)
+        )
     }
 })
 
@@ -139,6 +137,34 @@ endpoints.delete('/deletar/:id', async (req, resp) => {
             throw new Error('Não foi possível deletar')
 
         resp.status(204).send()
+    }
+    catch(err){
+        resp.status(500).send({
+            erro: err.message
+        })
+    }
+})
+
+endpoints.get('/procurarId/:id', async (req, resp) => {
+    try {
+        const {id} = req.params;
+
+        const resposta = await BuscarPorID(id);
+        resp.send(resposta);
+    } catch (error) {
+        resp.status(500).send({
+            erro: err.message
+        })
+    }
+})
+
+
+
+endpoints.get('/favoritos', async (req, resp) => {
+    try{
+        const resposta = await BuscarFavoritos()
+
+        resp.send(resposta)
     }
     catch(err){
         resp.status(500).send({
