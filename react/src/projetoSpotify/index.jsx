@@ -1,8 +1,10 @@
 import './index.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {confirmAlert} from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 export default function Spotify () {
 
@@ -13,7 +15,9 @@ export default function Spotify () {
     const [duracao, setDuracao] = useState('');
     const [lancamento, setLancamento] = useState('');
     const [album, setAlbum] = useState('');
-    const [favorito, setFavorito] = useState(false);
+
+    const [exibir, setExibir] = useState(false);
+
 
     const [pesquisa, setPesquisa] = useState('');
     const [registros, setRegistros] = useState([]);
@@ -42,19 +46,20 @@ export default function Spotify () {
                     lancamento: lancamento,
                     album: album,
                     img: urll,
-                    favorito: favorito,
                     genero: genero
                 }
-                console.log(url)
-                console.log(musica)
-                console.log(alterar)
+        
                 const resposta = await axios.put(url, musica);
-                console.log(resposta)
                 setAlterar(false)
                 toast.success('Faixa alterada com sucesso!!!');
-                pesquisarTodas();
+
+                const urlBuscar = 'http://localhost:5000/procurarId/' + id;
+                const respostaBuscar = await axios.get(urlBuscar);
+                const [musicax] = respostaBuscar.data;
+                setRegistros([musicax]);
+                
+                // pesquisarTodas();
                 zerarCampos();
-     
             } else if (alterar === false) {
                 const info = {
                     id: id,
@@ -70,11 +75,11 @@ export default function Spotify () {
                 const resposta = await axios.post(url, info);
         
                 zerarCampos();
-    
+                pesquisarTodas();
                 toast.success('Faixa ' + nome + ' adicionada!')
             }
         } catch (error) {
-            toast.error('ocorreu um erro! ' + error)
+            toast.error(error.response.data.erro);
         }
     }
 
@@ -84,7 +89,7 @@ export default function Spotify () {
                 const url = 'http://localhost:5000/buscar/nada';
                 const resposta = await axios.get(url);
                 setRegistros(resposta.data);
-                toast.info('Pesquisando por todos os registros!')
+                // toast.info('Pesquisando por todos os registros!')
             } else {
                 const url = 'http://localhost:5000/buscar/' + pesquisa;
 
@@ -96,17 +101,32 @@ export default function Spotify () {
         }
     }
 
-    async function deletar (id) {
-        try {
-            const url = 'http://localhost:5000/deletar/' + id;
+    async function deletar (id, nome) {
 
-            const resposta = await axios.delete(url);
-
-            pesquisarTodas();
-        } catch (error) {
-            toast.error('ocorreu um erro! ' + error);
+        confirmAlert({
+            title: 'Excluir música',
+            message: 'Tem certeza que deseja remover a faixa ' + nome + '?',
+            buttons: [
+              {
+                label: 'Sim',
+                onClick: async () => {
+                  try {
+                    const url = 'http://localhost:5000/deletar/' + id;
+                    const resposta = await axios.delete(url);
+                    setRegistros([]);
+                    toast.success('Faixa deletada com sucesso!');
+                  }
+                  catch (err) {
+                    toast.error('ocorreu um erro! ' + err.response.data.erro);
+                  }
+                }
+              },
+              {
+                label: 'Não'
+              }
+            ]
+          });
         }
-    }
 
     async function favoritar (valor, id) {
         try {
@@ -116,44 +136,36 @@ export default function Spotify () {
             }
 
             const resposta = await axios.put(url, payload);
-            setFavorito(!favorito);
+            // setFavorito(!valor);
 
-            if (favorito === !true) {
+            if (payload.valor === true) {
                 toast.success('Música favoritada com sucesso!');
             } else {
                 toast.warn('Musica desfavoritada :(')
             }
             pesquisarTodas();
             } catch (error) {
-                toast.error('ocorreu um erro! ' + error);
-            }
+                toast.error('Ocorreu um erro: ');
+                        }
     }
 
-    async function puxarCampos(id) {
-        try {
-            const urlBuscar = 'http://localhost:5000/procurarId/' + id;
-            const respostaBuscar = await axios.get(urlBuscar);
-            const [musica] = respostaBuscar.data;
-            console.log(musica)
+    function puxarCampos(item) {
 
-            setUrl(musica.img);
-            setNome(musica.musica);
-            setGenero(musica.genero);
-            setAutor(musica.cantor);
-            setDuracao(musica.duracao);
-            setLancamento(musica.lancamento);
-            setAlbum(musica.album);
+            setUrl(item.img);
+            setNome(item.musica);
+            setGenero(item.genero);
+            setAutor(item.cantor);
+            setDuracao(item.duracao.substr(3, 7));
+            setLancamento(item.lancamento.substr(0, 10));
+            setAlbum(item.album);
             setAlterar(true);
-            setAlteracaoID(id);
-        } catch (error) {
-            toast.error(error);
-        }
+            setAlteracaoID(item.id);
+       
     }
 
     async function buscarFavoritos() {
         try {
             const url = 'http://localhost:5000/favoritos';
-            toast.info('Pesquisando apenas pelas músicas favoritadas!')
             const resposta = await axios.get(url);
             setRegistros(resposta.data);
             
@@ -164,37 +176,73 @@ export default function Spotify () {
         
     }
 
+    function exibicao () {
+        setExibir(!exibir)
+        console.log(exibir)
+    }
+    
+    useEffect(() => {
+        buscarFavoritos()
+    }, [])
+
+
     return(
         <main className='spotify'>
             <ToastContainer />
             <header><img src="https://seeklogo.com/images/S/spotify-logo-7839B39C1B-seeklogo.com.png" alt="" style={{height: '60px'}}/></header>
             <article className='corpo-site'>
                 <section className="cadastroMusica">
-                    <div className='titulo'>
-                        <img src="/dropdown" alt="" />
+                    <div className='titulo' >
+                        <img src="dadf" alt="" />
                         <h1>Cadastre uma música</h1>
-                        <img src="/dropdown.png" alt="" />
+                        <input type="checkbox" id="checkbox" style={{display: 'none'}}></input>
+                        <label for="checkbox">
+                            <img src="/dropdown.png" alt="" onClick={exibicao}/>
+                        </label>
                     </div>
-                    <hr style={{width: '95%'}}/>
-                    <article className='formulario'>
-                        <input type="text" placeholder='INSIRA A URL DA IMAGEM!' value={urll} onChange={e => setUrl(e.target.value)}/>
+                    {exibir 
+                    ? <article className='formulario'>
+                    <hr style={{width: '115%'}}/>
+
+                        <input type="text" placeholder='Insira a url da imagem do álbum' value={urll} onChange={e => setUrl(e.target.value)}/>
                         <section className='campo-inputs'>
                             <div>
-                                <input type="text" placeholder='Título' value={nome} onChange={e => setNome(e.target.value)}/>
-                                <input type="text" placeholder='Autor' value={autor} onChange={e => setAutor(e.target.value)}/>
-                                <input type="text" placeholder='Gênero' value={genero} onChange={e => setGenero(e.target.value)}/>
+                                <div>
+                                    <h4> Título </h4>                                    
+                                    <input type="text" placeholder='ex.: Heavydirtysoul' value={nome} onChange={e => setNome(e.target.value)}/>
+                                </div>
+                                <div>
+                                    <h4> Autor </h4>
+                                    <input type="text" placeholder='ex.: Twenty one Pilots' value={autor} onChange={e => setAutor(e.target.value)}/>
+                                </div>
+                                <div>
+                                    <h4> Gênero </h4>
+                                    <input type="text" placeholder='ex.: Rock/Indie' value={genero} onChange={e => setGenero(e.target.value)}/>
+                                </div>
                             </div>
                             <div>
-                                <input type="text" placeholder='Duração' value={duracao} onChange={e => setDuracao(e.target.value)}/>
-                                <input type="text" placeholder='Data de lançamento' value={lancamento} onChange={e => setLancamento(e.target.value)}/>
-                                <input type="text" placeholder='Álbum'value={album} onChange={e => setAlbum(e.target.value)}/>
+                                <div>
+                                    <h4> Duração </h4>
+                                    <input type="text" placeholder='ex.: 04:53' value={duracao} onChange={e => setDuracao(e.target.value)}/>
+                                </div>
+                                <div>
+                                    <h4>Data de lançamento</h4>
+                                    <input type="text" placeholder='ex.: 2022/03/19' value={lancamento} onChange={e => setLancamento(e.target.value)}/>
+                                </div>
+                                <div>
+                                    <h4>Álbum</h4>
+                                    <input type="text" placeholder='ex.: Blurryface' value={album} onChange={e => setAlbum(e.target.value)}/>
+                                </div>
                             </div>
                         </section>
                         <div className='salvar' onClick={() => {adicionarMusica(alteracaoID)}}>
                             <p>{alterar ? 'Alterar Faixa' : 'Adicionar Música'}</p>
                         </div>
-                    </article>
-                    </section>
+                    </article> 
+                    : <></>}
+                   
+                    
+                </section>
 
                     <div className='pesquisa'>
                         <input type="text" placeholder='Busque por uma música' value={pesquisa} onChange={e => setPesquisa(e.target.value)}/>
@@ -203,22 +251,22 @@ export default function Spotify () {
                     </div>
                     
                     <section className="tabela-musicas">
-                        {registros.map(item => {
+                        {registros.length !== 0 
+                        ? registros.map(item => {
                             return (
                                 <article className="musica">
                                     <div className='titulo-descricao'>
                                         <h1>{item.musica}</h1>
                                         <div className='descricao-musica'>
                                             <p>{item.cantor}</p>
-                                            <p>{item.lancamento}</p>
-                                            <p>{item.duracao}</p>
+                                            <p>{item.lancamento.substr(0, 10)}</p>
+                                            <p>{item.duracao.substr(3, 7)}</p>
                                         </div>
                                         <p>{item.genero}</p>
                                         <div className="icones">
-                                            <img src="/alterar.png" alt="" onClick={() => {puxarCampos(item.id)}}/>
-                                            <img src="/deletar.png" alt="" onClick={() => {deletar(item.id)}} />
-                                            {}
-                                            <img src={item.favorito ? "/coracaoverde.svg" : "/coracao2.svg"} style={{color: 'green'}} alt="" className='coracao' onClick={() => favoritar(favorito, item.id)}/>
+                                            <img src="/alterar.png" alt="" onClick={() => {puxarCampos(item)}}/>
+                                            <img src="/deletar.png" alt="" onClick={() => {deletar(item.id, item.musica)}} />
+                                            <img src={item.favorito ? "/coracaoverde.svg" : "/coracao2.svg"} style={{color: 'green'}} alt="" className='coracao' onClick={() => favoritar(item.favorito, item.id)}/>
                                         </div>
                                     </div>
                                     <div className='outraDivisao'>
@@ -227,7 +275,13 @@ export default function Spotify () {
                                     </div>
                                 </article>
                             )
-                        })}
+                        })
+
+                        : <main className='sem-musicas'>
+                            <img src="/adicionarMusica.png" style={{width: '150px', marginTop: '-30px'}} alt="" />
+                            <h1>Nenhuma música selecionada no momento</h1>
+                          </main>
+                        }
                     </section>
             </article>
         </main>

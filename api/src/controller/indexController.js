@@ -15,6 +15,7 @@ endpoints.post('/inserir', async (req, resp) => {
             throw new Error('Duração não identificado')
         if(!musica.lancamento)
             throw new Error('Lançamento não identificado')
+        
         if(!musica.img)
             throw new Error('Imagem não identificada')
         if(!musica.album)
